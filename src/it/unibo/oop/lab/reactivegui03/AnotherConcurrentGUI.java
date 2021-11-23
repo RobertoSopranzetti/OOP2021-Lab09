@@ -1,4 +1,4 @@
-package it.unibo.oop.lab.reactivegui02;
+package it.unibo.oop.lab.reactivegui03;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
 /**
  * This is a first example on how to realize a reactive GUI.
  */
-public final class ConcurrentGUI extends JFrame {
+public final class AnotherConcurrentGUI extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private static final double WIDTH_PERC = 0.2;
@@ -28,7 +28,7 @@ public final class ConcurrentGUI extends JFrame {
     /**
      * Builds a new CGUI.
      */
-    public ConcurrentGUI() {
+    public AnotherConcurrentGUI() {
         super();
         final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setSize((int) (screenSize.getWidth() * WIDTH_PERC), (int) (screenSize.getHeight() * HEIGHT_PERC));
@@ -124,7 +124,7 @@ public final class ConcurrentGUI extends JFrame {
                         public void run() {
                             // This will happen in the EDT: since i'm reading counter it needs to be
                             // volatile.
-                            ConcurrentGUI.this.display.setText(Integer.toString(Agent.this.counter));
+                            AnotherConcurrentGUI.this.display.setText(Integer.toString(Agent.this.counter));
                         }
                     });
                     /*

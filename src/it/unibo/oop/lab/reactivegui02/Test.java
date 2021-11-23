@@ -1,5 +1,7 @@
 package it.unibo.oop.lab.reactivegui02;
 
+import it.unibo.oop.lab.reactivegui03.AnotherConcurrentGUI;
+
 /**
  * Exercise on a reactive GUI.
  */
@@ -39,6 +41,6 @@ public final class Test {
      * 
      */
     public static void main(final String... args) {
-        new ConcurrentGUI();
+        new AnotherConcurrentGUI();
     }
 }
