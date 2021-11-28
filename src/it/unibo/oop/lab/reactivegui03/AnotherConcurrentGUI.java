@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,10 +21,14 @@ public final class AnotherConcurrentGUI extends JFrame {
     private static final long serialVersionUID = 1L;
     private static final double WIDTH_PERC = 0.2;
     private static final double HEIGHT_PERC = 0.1;
+    private static final long TIME_TO_SLEEP = TimeUnit.SECONDS.toMillis(10);
+    
     private final JLabel display = new JLabel();
     private final JButton stop = new JButton("stop");
     private final JButton up = new JButton("up");
     private final JButton down = new JButton("down");
+    
+    private final Agent agent = new Agent();
 
     /**
      * Builds a new CGUI.
@@ -44,8 +49,8 @@ public final class AnotherConcurrentGUI extends JFrame {
          * Create the counter agent and start it. This is actually not so good: thread
          * management should be left to java.util.concurrent.ExecutorService
          */
-        final Agent agent = new Agent();
-        new Thread(agent).start();
+        
+       
         /*
          * Register a listener that stops it
          */
@@ -90,6 +95,31 @@ public final class AnotherConcurrentGUI extends JFrame {
                 agent.changeDown();
             }
         });
+        new Thread(agent).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(TIME_TO_SLEEP);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                AnotherConcurrentGUI.this.stopCounting();
+            }
+            
+        }).start();
+    }
+    
+    private void stopCounting() {
+        agent.stopCounting();
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run() {
+                stop.setEnabled(false);
+                up.setEnabled(false);
+                down.setEnabled(false);
+            }
+        });
     }
 
     /*
@@ -115,34 +145,15 @@ public final class AnotherConcurrentGUI extends JFrame {
         public void run() {
             while (!this.stop) {
                 try {
-                    /*
-                     * All the operations on the GUI must be performed by the Event-Dispatch Thread
-                     * (EDT)!
-                     */
                     SwingUtilities.invokeAndWait(new Runnable() {
                         @Override
                         public void run() {
-                            // This will happen in the EDT: since i'm reading counter it needs to be
-                            // volatile.
                             AnotherConcurrentGUI.this.display.setText(Integer.toString(Agent.this.counter));
                         }
                     });
-                    /*
-                     * SpotBugs shows a warning because the increment of a volatile variable is not
-                     * atomic, so the concurrent access is potentially not safe. In the specific
-                     * case of this exercise, we do synchronization with invokeAndWait, so it can be
-                     * ignored.
-                     *
-                     * EXERCISE: Can you think of a solution that doesn't require counter to be
-                     * volatile? (without using synchronized or locks)
-                     */
                     this.counter = up ? this.counter + 1 : this.counter - 1;
                     Thread.sleep(100);
                 } catch (InvocationTargetException | InterruptedException ex) {
-                    /*
-                     * This is just a stack trace print, in a real program there should be some
-                     * logging and decent error reporting
-                     */
                     ex.printStackTrace();
                 }
             }
