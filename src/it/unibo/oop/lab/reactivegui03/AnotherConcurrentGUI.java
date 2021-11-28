@@ -22,12 +22,12 @@ public final class AnotherConcurrentGUI extends JFrame {
     private static final double WIDTH_PERC = 0.2;
     private static final double HEIGHT_PERC = 0.1;
     private static final long TIME_TO_SLEEP = TimeUnit.SECONDS.toMillis(10);
-    
+
     private final JLabel display = new JLabel();
     private final JButton stop = new JButton("stop");
     private final JButton up = new JButton("up");
     private final JButton down = new JButton("down");
-    
+
     private final Agent agent = new Agent();
 
     /**
@@ -45,15 +45,7 @@ public final class AnotherConcurrentGUI extends JFrame {
         panel.add(stop);
         this.getContentPane().add(panel);
         this.setVisible(true);
-        /*
-         * Create the counter agent and start it. This is actually not so good: thread
-         * management should be left to java.util.concurrent.ExecutorService
-         */
-        
-       
-        /*
-         * Register a listener that stops it
-         */
+
         stop.addActionListener(new ActionListener() {
             /**
              * event handler associated to action event on button stop.
@@ -106,13 +98,11 @@ public final class AnotherConcurrentGUI extends JFrame {
                 }
                 AnotherConcurrentGUI.this.stopCounting();
             }
-            
         }).start();
     }
-    
     private void stopCounting() {
         agent.stopCounting();
-        SwingUtilities.invokeLater(new Runnable(){
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 stop.setEnabled(false);
