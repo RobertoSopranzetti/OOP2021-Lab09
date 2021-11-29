@@ -34,8 +34,11 @@ public class MultiThreadedSumMatrix implements SumMatrix {
 
         /**
          * @param matrix
+         *                     matrix to be summed
          * @param startPos
+         *                     starting position
          * @param nElem
+         *                     number of elements
          */
         Worker(final double[][] matrix, final int startPos, final int nElem) {
             super();
