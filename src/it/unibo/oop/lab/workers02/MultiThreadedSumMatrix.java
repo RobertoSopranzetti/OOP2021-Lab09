@@ -37,7 +37,7 @@ public class MultiThreadedSumMatrix implements SumMatrix {
          * @param startPos
          * @param nElem
          */
-        Worker(double[][] matrix, int startPos, int nElem) {
+        Worker(final double[][] matrix, final int startPos, final int nElem) {
             super();
             this.matrix = matrix;
             this.startPos = startPos;

@@ -14,14 +14,14 @@ import org.junit.Test;
 public class TestMatrix {
 
     /*
-     * Si fornisce l'interfaccia SumMatrix, con un metodo per calcolare la
-     * somma degli elementi di una matrice.
+     * Si fornisce l'interfaccia SumMatrix, con un metodo per calcolare la somma
+     * degli elementi di una matrice.
      * 
-     * Realizzare una classe MultiThreadedSumMatrix, con costrutto che accetta
-     * un intero positivo 'n', che implementa tale funzionalità in modo
+     * Realizzare una classe MultiThreadedSumMatrix, con costrutto che accetta un
+     * intero positivo 'n', che implementa tale funzionalità in modo
      * "multi-threaded", con 'n' Worker che si dividano il compito in modo
-     * sufficientemente omogeneo -- non è necessario che l'ammontare dei compiti
-     * dei singoli Worker siano esattamente equivalenti.
+     * sufficientemente omogeneo -- non è necessario che l'ammontare dei compiti dei
+     * singoli Worker siano esattamente equivalenti.
      * 
      * Si faccia stampare (su System.out) ad ogni Worker una indicazione di che
      * porzione del lavoro svolge.
@@ -49,13 +49,12 @@ public class TestMatrix {
         }
         System.out.println("BTW: the sum with " + SIZE + "*" + SIZE + " elements is: " + sum);
         long time;
-        for (final int threads: new int[] { 1, 2, 3, 8, 16, 32, 100 }) {
-            final SumMatrix sumList = null; // new MultiThreadedSumMatrix(threads);
+        for (final int threads : new int[] { 1, 2, 3, 8, 16, 32, 100 }) {
+            final SumMatrix sumList = new MultiThreadedSumMatrix(threads);
             time = System.nanoTime();
             assertEquals(sum, sumList.sum(matrix), EXPECTED_DELTA);
             time = System.nanoTime() - time;
-            System.out.println("Tried with " + threads + " thread"
-                    + (threads == 1 ? "" : "s") + ": "
+            System.out.println("Tried with " + threads + " thread" + (threads == 1 ? "" : "s") + ": "
                     + TimeUnit.NANOSECONDS.toMillis(time) + MSEC);
         }
     }
